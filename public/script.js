@@ -1,4 +1,4 @@
-const socket = io.connect('http://localhost:5000/')
+const socket = io.connect('http://192.168.1.2:5050/')
 
 const main = document.querySelector('main')
 const sender = document.getElementById('name')
