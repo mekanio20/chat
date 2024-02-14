@@ -12,16 +12,26 @@ btn.addEventListener('click', () => {
     })
 }, false)
 
+message.addEventListener('keydown', (event) => {
+    if (event.key === "Enter") {
+        socket.emit('chat', {
+            message: message.value,
+            sender: sender.value
+        })
+    }
+}, false)
+
 socket.on('chat', data => {
     const output = document.createElement('div')
     const b = document.createElement('b')
     const p = document.createElement('p')
     output.classList = 'main__output'
     b.classList = 'sender__name'
+    p.classList = 'sender__content'
 
     b.innerHTML = data.sender + ':'
     p.innerHTML = data.message
-    
+
     output.appendChild(b)
     output.appendChild(p)
 
