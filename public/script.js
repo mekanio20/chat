@@ -1,4 +1,4 @@
-const socket = io.connect('http://192.168.1.2:5050/')
+const socket = io.connect('http://192.168.248.172:5050/')
 
 const main = document.querySelector('main')
 const sender = document.getElementById('name')

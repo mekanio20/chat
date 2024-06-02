@@ -2,7 +2,7 @@ const cors = require('cors')
 const express = require('express')
 const socket = require('socket.io')
 const port = 5050
-const ip = '192.168.1.2'
+const ip = '192.168.248.172'
 const app = express()
 
 app.use(cors())
