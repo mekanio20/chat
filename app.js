@@ -1,24 +1,30 @@
-const cors = require('cors')
-const express = require('express')
-const socket = require('socket.io')
-const port = 5050
-const ip = '192.168.248.172'
-const app = express()
+const { Server } = require("socket.io");
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
 
-app.use(cors())
-app.use(express.static('public'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
-const server = app.listen(port, ip, () => {
-    console.log(`Server is running: http://${ip}:${port}`);
-})
+app.use(cors());
 
-const io = socket(server)
+io.on("connection", (socket) => {
+  console.log("Taze ulanyjy baglandy:", socket.id);
 
-io.on('connection', (socket) => {
-    console.log(socket.id)
-    socket.on('chat', data => {
-        io.sockets.emit('chat', data)
-    })
-})
+  socket.on("chatMessage", (msg) => {
+    io.emit("chatMessage", msg);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Ulanyjy ayryldy:", socket.id);
+  });
+});
+
+server.listen(3000, () => {
+  console.log("Server running: http://localhost:3000");
+});

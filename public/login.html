@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Girişi</title>
+    <script src="tailwind.js"></script>
+  </head>
+  <body class="bg-green-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-sm bg-white shadow-lg rounded-lg p-6 text-center">
+      <h2 class="text-2xl font-semibold text-green-600 mb-4">Chata girmek</h2>
+      <input
+        required
+        type="text"
+        id="username"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none mb-4"
+        placeholder="Adynyzy girizin..."
+      />
+      <button
+        onclick="saveUsername()"
+        class="w-full bg-green-500 text-white px-4 py-2 rounded-lg"
+      >
+        Girmek
+      </button>
+    </div>
+
+    <script>
+      function saveUsername() {
+        let username = document.getElementById("username").value.trim();
+        if (username) {
+          localStorage.setItem("username", username);
+          window.location.href = "main.html";
+        } else {
+          alert("Bir ad girizin!");
+        }
+      }
+    </script>
+  </body>
+</html>
