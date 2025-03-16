@@ -1,12 +1,14 @@
-const { Server } = require("socket.io");
 const express = require("express");
 const http = require("http");
-const cors = require("cors");
+const socketIo = require("socket.io");
+const multer = require("multer");
 const path = require("path");
+const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
+const io = socketIo(server, {
   cors: {
     origin: "*",
   },
@@ -15,11 +17,28 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
-io.on("connection", (socket) => {
-  console.log("Taze ulanyjy baglandy:", socket.id);
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-  socket.on("chatMessage", (msg) => {
-    io.emit("chatMessage", msg);
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueName + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
+
+io.on("connection", (socket) => {
+  console.log("Taze ulanyjy catyldy:", socket.id);
+
+  socket.on("chatMessage", (data) => {
+    io.emit("chatMessage", data);
   });
 
   socket.on("disconnect", () => {
@@ -27,6 +46,18 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, '192.168.1.7', () => {
-  console.log("Server running: http://192.168.1.7:3000");
+app.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Dosya yüklenemedi" });
+  }
+
+  const fileUrl = `http://216.250.13.54:3000/uploads/${req.file.filename}`;
+
+  io.emit("fileUploaded", { filename: req.file.originalname, url: fileUrl });
+
+  res.json({ fileUrl });
+});
+
+server.listen(3000, "0.0.0.0", () => {
+  console.log("Server ishleyar: http://216.250.13.54:3000");
 });
