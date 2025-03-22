@@ -65,7 +65,7 @@
 
     <script>
       const socket = io("http://216.250.13.54:3000");
-      const username = localStorage.getItem("username") || "Misafir";
+      const username = localStorage.getItem("username") || "Nätanyş";
       const userColor = getRandomColor();
       let selectedFile = null;
 
@@ -84,7 +84,7 @@
         let message = messageInput.value.trim();
 
         if (message) {
-          socket.emit("chatMessage", { text: message, color: userColor });
+          socket.emit("chatMessage", { text: message, color: userColor, username });
           messageInput.value = "";
         }
 
@@ -152,12 +152,13 @@
       }
 
       socket.on("chatMessage", (data) => {
+        console.log(data);
         let chatBox = document.getElementById("chat-box");
         let messageElement = document.createElement("div");
         messageElement.className = "flex justify-start mt-2";
         messageElement.innerHTML = `
         <div class="flex flex-col items-start space-y-2">
-          <span class="font-semibold" style="color: ${data.color}">${username}:</span>
+          <span class="font-semibold" style="color: ${data.color}">${data.username}:</span>
           <div class='px-4 py-2 rounded-lg' style='background-color: ${data.color}; color: white;'>${data.text}</div>
         </div>
       `;
