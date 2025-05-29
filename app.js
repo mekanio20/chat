@@ -51,7 +51,7 @@ app.post("/upload", upload.single("file"), (req, res) => {
     return res.status(400).json({ message: "Dosya yüklenemedi" });
   }
 
-  const fileUrl = `http://216.250.13.54:3000/uploads/${req.file.filename}`;
+  const fileUrl = `http://216.250.14.192:3000/uploads/${req.file.filename}`;
 
   io.emit("fileUploaded", { filename: req.file.originalname, url: fileUrl });
 
@@ -59,5 +59,5 @@ app.post("/upload", upload.single("file"), (req, res) => {
 });
 
 server.listen(3000, "0.0.0.0", () => {
-  console.log("Server ishleyar: http://216.250.13.54:3000");
+  console.log("Server ishleyar: http://216.250.14.192:3000");
 });

@@ -64,7 +64,7 @@
     </div>
 
     <script>
-      const socket = io("http://216.250.13.54:3000");
+      const socket = io("http://216.250.14.192:3000");
       const username = localStorage.getItem("username") || "Nätanyş";
       const userColor = getRandomColor();
       let selectedFile = null;
@@ -110,7 +110,7 @@
         formData.append("file", file);
 
         try {
-          const response = await fetch("http://216.250.13.54:3000/upload", {
+          const response = await fetch("http://216.250.14.192:3000/upload", {
             method: "POST",
             body: formData,
           });
